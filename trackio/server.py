@@ -810,19 +810,34 @@ def get_snapshot(
 
 
 def get_logs(
-    project: str, run: str | None = None, run_id: str | None = None
+    project: str,
+    run: str | None = None,
+    run_id: str | None = None,
+    scalar_only: bool = False,
 ) -> list[dict[str, Any]]:
-    return SQLiteStorage.get_logs(project, run, max_points=3000, run_id=run_id)
+    return SQLiteStorage.get_logs(
+        project,
+        run,
+        max_points=3000,
+        run_id=run_id,
+        scalar_only=bool(scalar_only),
+    )
 
 
 def get_logs_batch(
     project: str,
     runs: list[dict[str, Any]],
     max_points: int | None = 3000,
+    scalar_only: bool = False,
 ) -> list[dict[str, Any]]:
     runs_clean = _normalize_logs_batch_runs(runs)
     mp = _normalize_logs_batch_max_points(max_points)
-    return SQLiteStorage.get_logs_batch(project, runs_clean, max_points=mp)
+    return SQLiteStorage.get_logs_batch(
+        project,
+        runs_clean,
+        max_points=mp,
+        scalar_only=bool(scalar_only),
+    )
 
 
 _ALLOWED_TRACE_SORTS = {
